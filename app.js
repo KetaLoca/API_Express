@@ -1,8 +1,11 @@
 const express = require("express");
+const crypto = require("node:crypto");
 const movies = require("./movies.json");
 
 const app = express();
 app.disable("x-powered-by");
+
+app.use(express.json());
 
 app.get("/movies", (req, res) => {
   const { genre } = req.query;
@@ -21,6 +24,25 @@ app.get("/movies/:id", (req, res) => {
   if (movie) return res.json(movie);
 
   res.status(404).json({ message: "movie not found" });
+});
+
+app.post("/movies", (req, res) => {
+  const { title, genre, year, director, duration, rate, poster } = req.body;
+
+  const movie = {
+    id: crypto.randomUUID(),
+    title,
+    genre,
+    year,
+    director,
+    duration,
+    rate: rate ?? 0,
+    poster,
+  };
+
+  movies.push(movie);
+
+  res.status(201).json(movie);
 });
 
 const PORT = process.env.PORT ?? 1234;
