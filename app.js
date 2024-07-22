@@ -5,6 +5,13 @@ const app = express();
 app.disable("x-powered-by");
 
 app.get("/movies", (req, res) => {
+  const { genre } = req.query;
+  if (genre) {
+    const filteredMovies = movies.filter((movie) =>
+      movie.genre.includes(genre)
+    );
+    return res.json(filteredMovies);
+  }
   res.json(movies);
 });
 
