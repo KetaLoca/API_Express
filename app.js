@@ -1,7 +1,7 @@
 const express = require("express");
 const crypto = require("node:crypto");
 const movies = require("./movies.json");
-const z = require("zod");
+const { validateMovie } = require("./schemas/movies");
 
 const app = express();
 app.disable("x-powered-by");
@@ -28,40 +28,33 @@ app.get("/movies/:id", (req, res) => {
 });
 
 app.post("/movies", (req, res) => {
-  const movieSchema = z.object({
-    title: z.string({
-      invalid_type_error: 'Movie title must be a String',
-      required_error: 'Movie title is required'
-    }),
-    year: z.number().int().min(1900).max(2024),
-    director: z.string(),
-    rate: z.number().min(0).max(10),
-    poster: z.string().url({ message: 'Poster must be an URL' }),
-    genre: z.array(
-      z.enum(['Action', 'Adventure', 'Comedy', 'Drama', 'Fantasy', 'Horror', 'Thriller', 'Sci-Fi']),
-      {
-        invalid_type_error: 'This must be an Array',
-        required_error: 'Movie genre is required'
-      }
-    )
-  })
+  // const { title, genre, year, director, duration, rate, poster } = req.body;
 
-  const { title, genre, year, director, duration, rate, poster } = req.body;
+  // if (!title || !genre || !year || !director || !duration || !rate || !poster) {
+  //   return res.status(400).json({ message: "hay algún campo vacío" })
+  // }
 
-  if (!title || !genre || !year || !director || !duration || !rate || !poster) {
-    return res.status(400).json({ message: "hay algún campo vacío" })
+  // const movie = {
+  //   id: crypto.randomUUID(),
+  //   title,
+  //   genre,
+  //   year,
+  //   director,
+  //   duration,
+  //   rate: rate ?? 0,
+  //   poster,
+  // };
+
+  const result = validateMovie(req.body)
+
+  if (result.error) {
+    return res.status(400).json({ message: JSON.parse(result.error.message) })
   }
 
   const movie = {
     id: crypto.randomUUID(),
-    title,
-    genre,
-    year,
-    director,
-    duration,
-    rate: rate ?? 0,
-    poster,
-  };
+    ...result.data()
+  }
 
   movies.push(movie);
 
