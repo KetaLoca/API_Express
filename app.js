@@ -29,6 +29,10 @@ app.get("/movies/:id", (req, res) => {
 app.post("/movies", (req, res) => {
   const { title, genre, year, director, duration, rate, poster } = req.body;
 
+  if (!title || !genre || !year || !director || !duration || !rate || !poster) {
+    return res.status(400).json({ message: "hay algún campo vacío" })
+  }
+
   const movie = {
     id: crypto.randomUUID(),
     title,
