@@ -1,13 +1,16 @@
-const express = require("express");
-const crypto = require("node:crypto");
-const movies = require("./movies.json");
-const cors = require("cors")
-const { validateMovie, validatePartialMovie } = require("./schemas/movies");
+import express, { json } from "express";
+import { randomUUID } from "node:crypto";
+import cors from "cors";
+import { validateMovie, validatePartialMovie } from "./schemas/movies.js";
+// import movies from "./movies.json" with {type: 'json'};
+import { createRequire } from "node:module";
+const require = createRequire(import.meta.url)
+const movies = require('./movies.json')
 
 const app = express();
 app.disable("x-powered-by");
 
-app.use(express.json());
+app.use(json());
 app.use(cors())
 
 app.get("/movies", (req, res) => {
@@ -54,7 +57,7 @@ app.post("/movies", (req, res) => {
   }
 
   const movie = {
-    id: crypto.randomUUID(),
+    id: randomUUID(),
     ...result.data
   }
 
