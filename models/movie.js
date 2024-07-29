@@ -37,7 +37,7 @@ export class MovieModel {
     if (MovieIndex == -1) {
       return false;
     }
-    const updatedMovie = { ...movies[MovieIndex], ...result.data };
+    const updatedMovie = { ...movies[MovieIndex], ...input.data };
     movies[MovieIndex] = updatedMovie;
     return true;
   }
