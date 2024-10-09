@@ -35,7 +35,7 @@ export class MovieController {
             return res.status(400).json(result.error.message);
         }
         const { id } = req.params;
-        const comprobar = await MovieModel.update({ id, input });
+        const comprobar = await MovieModel.update({ id, result });
         if (comprobar) {
             return res.json({ message: "Película modificada correctamente" });
         }

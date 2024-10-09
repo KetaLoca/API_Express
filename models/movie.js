@@ -23,12 +23,12 @@ export class MovieModel {
     movies.push(movie);
   }
 
-  static async update({ id, input }) {
+  static async update({ id, result }) {
     const MovieIndex = movies.findIndex((movie) => movie.id == id);
     if (MovieIndex == -1) {
       return false;
     }
-    const updatedMovie = { ...movies[MovieIndex], ...input.data };
+    const updatedMovie = { ...movies[MovieIndex], ...result.data };
     movies[MovieIndex] = updatedMovie;
     return true;
   }
