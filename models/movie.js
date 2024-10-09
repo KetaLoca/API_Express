@@ -18,18 +18,9 @@ export class MovieModel {
     return movie;
   }
 
-  static async create({ input }) {
+  static async create(input) {
     const movie = { id: randomUUID(), ...input.data };
     movies.push(movie);
-  }
-
-  static async delete({ id }) {
-    const movieIndex = movies.findIndex((movie) => movie.id == id);
-    if (movieIndex == -1) {
-      return false;
-    }
-    movies.splice(movieIndex, 1);
-    return true;
   }
 
   static async update({ id, input }) {
@@ -39,6 +30,15 @@ export class MovieModel {
     }
     const updatedMovie = { ...movies[MovieIndex], ...input.data };
     movies[MovieIndex] = updatedMovie;
+    return true;
+  }
+
+  static async delete({ id }) {
+    const movieIndex = movies.findIndex((movie) => movie.id == id);
+    if (movieIndex == -1) {
+      return false;
+    }
+    movies.splice(movieIndex, 1);
     return true;
   }
 }

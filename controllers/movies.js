@@ -26,7 +26,7 @@ export class MovieController {
 
         await MovieModel.create(result.data);
 
-        res.status(201).json(movie);
+        res.status(201).json(result);
     }
 
     static async update(req, res) {
@@ -35,7 +35,7 @@ export class MovieController {
             return res.status(400).json(result.error.message);
         }
         const { id } = req.params;
-        const comprobar = await MovieModel.update(id, result);
+        const comprobar = await MovieModel.update({ id, input });
         if (comprobar) {
             return res.json({ message: "Película modificada correctamente" });
         }
@@ -44,7 +44,7 @@ export class MovieController {
 
     static async delete(req, res) {
         const { id } = req.params;
-        const result = await MovieModel.delete(id);
+        const result = await MovieModel.delete({ id });
         if (result) {
             return res.json({ message: "Movie deleted" });
         }
